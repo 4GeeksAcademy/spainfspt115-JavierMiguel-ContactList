@@ -14,21 +14,19 @@ export const initialStore = () => {
       }
     ],
     contacts: []
-  }
-}
+  };
+};
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
     case 'add_task':
-
-      const { id, color } = action.payload
-
+      const { id, color } = action.payload;
       return {
         ...store,
         todos: store.todos.map((todo) => (todo.id === id ? { ...todo, background: color } : todo))
       };
 
-    //contacts actions
+    // contacts actions
     case "get_contacts":
       return { 
         ...store, 
@@ -38,7 +36,7 @@ export default function storeReducer(store, action = {}) {
     case "add_contact":
       return { 
         ...store, 
-        contacts: [...store.contacts, { ...action.payload, id: Date.now() }] 
+        contacts: [...store.contacts, { ...action.payload, id: Date.now() }] // genera id aquí
       };
 
     case "update_contact":
@@ -46,6 +44,7 @@ export default function storeReducer(store, action = {}) {
         ...store,
         contacts: store.contacts.map(c => c.id === action.payload.id ? action.payload : c)
       };
+
     case "delete_contact":
       return {
         ...store,

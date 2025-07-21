@@ -1,20 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import { useNavigate, useParams } from "react-router-dom";
+import { updateContact, addContact } from "../services/ApiServices";
 
-export const ContactForm = ({ contactToEdit, onAdd, onUpdate }) => {
+export const ContactForm = () => {
+  const { store, dispatch } = useGlobalReducer();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
   const [form, setForm] = useState({
+    id: null,
     name: "",
     email: "",
     phone: "",
-    address: "",
+    address: ""
   });
 
   useEffect(() => {
-    if (contactToEdit) {
-      setForm(contactToEdit);
-    } else {
-      setForm({ name: "", email: "", phone: "", address: "" });
+    if (id) {
+      const contactToEdit = store.contacts.find(c => c.id === Number(id));
+      if (contactToEdit) {
+        setForm(contactToEdit);
+      }
     }
-  }, [contactToEdit]);
+  }, [id, store.contacts]);
 
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -22,65 +31,31 @@ export const ContactForm = ({ contactToEdit, onAdd, onUpdate }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (contactToEdit) {
-      onUpdate(form);
+
+    if (form.id) {
+      updateContact(dispatch, form);
     } else {
-      onAdd(form);
+      console.log("esta añadiendo");
+      
+      const { id, ...contactWithoutId } = form;
+      addContact(dispatch, contactWithoutId);
     }
-    setForm({ name: "", email: "", phone: "", address: "" });
+
+    navigate("/");
   };
 
   return (
     <div className="container mt-4">
       <div className="card">
         <div className="card-body">
-          <h4 className="card-title mb-4">{contactToEdit ? "Edit Contact" : "Add New Contact"}</h4>
+          <h4 className="card-title mb-4">{form.id ? "Edit Contact" : "Add New Contact"}</h4>
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <input
-                type="text"
-                name="name"
-                className="  form-control"
-                placeholder="Name"
-                value={form.name}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="email"
-                name="email"
-                className="form-control"
-                placeholder="Email"
-                value={form.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="tel"
-                name="phone"
-                className="form-control"
-                placeholder="Phone"
-                value={form.phone}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="mb-3">
-              <input
-                type="text"
-                name="address"
-                className="form-control"
-                placeholder="Address"
-                value={form.address}
-                onChange={handleChange}
-              />
-            </div>
+            <input name="name" value={form.name} onChange={handleChange} required className="form-control mb-2" placeholder="Name" />
+            <input name="email" value={form.email} onChange={handleChange} required className="form-control mb-2" placeholder="Email" />
+            <input name="phone" value={form.phone} onChange={handleChange} className="form-control mb-2" placeholder="Phone" />
+            <input name="address" value={form.address} onChange={handleChange} className="form-control mb-3" placeholder="Address" />
             <button type="submit" className="btn btn-primary w-100">
-              <i className="fas fa-save me-2"></i>
-              {contactToEdit ? "Update Contact" : "Save Contact"}
+              {form.id ? "Update Contact" : "Save Contact"}
             </button>
           </form>
         </div>

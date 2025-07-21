@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const ContactCard = ({ ContactList, onEdit, onDelete }) => {
+export const ContactCard = ({ ContactList, onDelete }) => {
   const [selectedContact, setSelectedContact] = useState(null);
+  const navigate = useNavigate();
 
-  const handleDeleteConfirmed = () => {
+  const confirmDelete = () => {
     onDelete(selectedContact.id);
     setSelectedContact(null);
   };
@@ -11,7 +13,6 @@ export const ContactCard = ({ ContactList, onEdit, onDelete }) => {
   return (
     <div className="container mt-4">
       <h3>Contact List</h3>
-
       {ContactList.map(contact => (
         <div key={contact.id} className="card mb-3">
           <div className="card-body d-flex justify-content-between align-items-center">
@@ -24,30 +25,24 @@ export const ContactCard = ({ ContactList, onEdit, onDelete }) => {
             />
             <div>
               <h5>{contact.name}</h5>
-              <p className="mb-1"><i className="fas fa-envelope me-2"></i>{contact.email}</p>
-              <p className="mb-1"><i className="fas fa-phone me-2"></i>{contact.phone}</p>
-              <p className="mb-0"><i className="fas fa-map-marker-alt me-2"></i>{contact.address}</p>
+              <p><i className="fas fa-envelope me-2"></i>{contact.email}</p>
+              <p><i className="fas fa-phone me-2"></i>{contact.phone}</p>
+              <p><i className="fas fa-map-marker-alt me-2"></i>{contact.address}</p>
             </div>
             <div>
-              <button
-                className="btn btn-outline-primary btn-sm me-2"
-                onClick={() => onEdit(contact)}
-              >
+              <button className="btn btn-outline-primary btn-sm me-2" onClick={() => navigate(`/edit/${contact.id}`)}>
                 <i className="fas fa-pencil-alt"></i>
               </button>
-              <button
-                className="btn btn-outline-danger btn-sm"
-                onClick={() => setSelectedContact(contact)}
-              >
+              <button className="btn btn-outline-danger btn-sm" onClick={() => setSelectedContact(contact)}>
                 <i className="fas fa-trash-alt"></i>
               </button>
             </div>
           </div>
         </div>
       ))}
-
+      
       {selectedContact && (
-        <div className="modal show fade d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+        <div className="modal show fade d-block" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
@@ -55,15 +50,11 @@ export const ContactCard = ({ ContactList, onEdit, onDelete }) => {
                 <button className="btn-close" onClick={() => setSelectedContact(null)}></button>
               </div>
               <div className="modal-body">
-                <p>¿Seguro que deseas eliminar a <strong>{selectedContact.name}</strong>?</p>
+                <p>¿Estás seguro de eliminar a <strong>{selectedContact.name}</strong>?</p>
               </div>
               <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setSelectedContact(null)}>
-                  Cancelar
-                </button>
-                <button className="btn btn-danger" onClick={handleDeleteConfirmed}>
-                  Eliminar
-                </button>
+                <button className="btn btn-secondary" onClick={() => setSelectedContact(null)}>Cancelar</button>
+                <button className="btn btn-danger" onClick={confirmDelete}>Eliminar</button>
               </div>
             </div>
           </div>
