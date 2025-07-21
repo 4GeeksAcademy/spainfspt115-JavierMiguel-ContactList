@@ -40,21 +40,21 @@ export const ContactCard = ({ ContactList, onDelete }) => {
           </div>
         </div>
       ))}
-      
+
       {selectedContact && (
         <div className="modal show fade d-block" style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Eliminar contacto</h5>
+                <h5 className="modal-title">Delete Contact</h5>
                 <button className="btn-close" onClick={() => setSelectedContact(null)}></button>
               </div>
               <div className="modal-body">
-                <p>¿Estás seguro de eliminar a <strong>{selectedContact.name}</strong>?</p>
+                <p>¿Are you sure to delete <strong>{selectedContact.name}</strong>?</p>
               </div>
               <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={() => setSelectedContact(null)}>Cancelar</button>
-                <button className="btn btn-danger" onClick={confirmDelete}>Eliminar</button>
+                <button className="btn btn-secondary" onClick={() => setSelectedContact(null)}>Cancel</button>
+                <button className="btn btn-danger" onClick={confirmDelete}>Delete</button>
               </div>
             </div>
           </div>
