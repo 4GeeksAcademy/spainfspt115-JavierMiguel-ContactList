@@ -25,6 +25,16 @@ export const ContactForm = () => {
         setForm(contactToEdit);
       }
     }
+    else {
+      setForm({
+        id: null,
+        name: "",
+        email: "",
+        phone: "",
+        address: ""
+      });
+      
+    }
   }, [id, store.contacts]);
 
   const handleChange = (e) => {
