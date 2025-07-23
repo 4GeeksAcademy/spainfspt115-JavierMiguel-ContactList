@@ -17,8 +17,10 @@ export const ContactForm = () => {
   });
 
   useEffect(() => {
+    console.log(id);
+    
     if (id) {
-      const contactToEdit = store.contacts.find(c => c.id === Number(id));
+      const contactToEdit = store.contacts.find(contact => contact.id === Number(id));
       if (contactToEdit) {
         setForm(contactToEdit);
       }
@@ -29,16 +31,14 @@ export const ContactForm = () => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (form.id) {
-      updateContact(dispatch, form);
+      await updateContact(dispatch, form);
     } else {
-      console.log("esta añadiendo");
-      
       const { id, ...contactWithoutId } = form;
-      addContact(dispatch, contactWithoutId);
+      await addContact(dispatch, contactWithoutId);
     }
 
     navigate("/");

@@ -36,19 +36,19 @@ export default function storeReducer(store, action = {}) {
     case "add_contact":
       return { 
         ...store, 
-        contacts: [...store.contacts, { ...action.payload, id: Date.now() }] // genera id aquí
+        contacts: [...store.contacts, action.payload]
       };
 
     case "update_contact":
       return {
         ...store,
-        contacts: store.contacts.map(c => c.id === action.payload.id ? action.payload : c)
+        contacts: store.contacts.map(contact => contact.id === action.payload.id ? action.payload : contact)
       };
 
     case "delete_contact":
       return {
         ...store,
-        contacts: store.contacts.filter(c => c.id !== action.payload)
+        contacts: store.contacts.filter(contact => contact.id !== action.payload)
       };
 
     default:
