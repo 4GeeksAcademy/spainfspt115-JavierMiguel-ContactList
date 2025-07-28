@@ -1,4 +1,5 @@
 const CONTACT_LIST = "javimv";
+const BASE_URL_LIST = `https://playground.4geeks.com/contact/agendas/${CONTACT_LIST}`;
 const BASE_URL = `https://playground.4geeks.com/contact/agendas/${CONTACT_LIST}/contacts`;
 
 export const getInitialContacts = async (dispatch) => {
@@ -11,6 +12,24 @@ export const getInitialContacts = async (dispatch) => {
     });
   } else {
     console.log("Error at GET contacts !!");
+    
+      const resCreate = await fetch(BASE_URL_LIST, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({name: CONTACT_LIST})
+    });
+
+    if (resCreate.ok) {
+      console.log("Contact list Created");
+    }
+    else if (resCreate.status === 400) {
+      console.log("Contact List already exists !!");
+      console.log("Empty Contact List !!");
+      
+    } else {
+      console.log("Error Creating Contact List");
+      
+    }
   }
 };
 

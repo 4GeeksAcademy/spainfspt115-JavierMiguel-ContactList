@@ -17,7 +17,7 @@ export const ContactForm = () => {
   });
 
   useEffect(() => {
-    console.log(id);
+    // console.log(id);
     
     if (id) {
       const contactToEdit = store.contacts.find(contact => contact.id === Number(id));
